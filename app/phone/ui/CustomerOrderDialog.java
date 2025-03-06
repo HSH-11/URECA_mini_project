@@ -29,8 +29,8 @@ public class CustomerOrderDialog extends JDialog {
        
         tableModel = new DefaultTableModel(
         	    new Object[]{
-        	        "Order ID", "Order Date", "Order Status", "Payment Status", "Shipping Address", 
-        	        "Product Name", "Quantity", "Unit Price", "Total Price"
+        	        "Order ID",  "Order Status", "Payment Status", "Shipping Address", 
+        	        "Product Name", "Quantity", "Unit Price", "Discount", "Total Price"
         	    }, 0);
 
         orderTable = new JTable(tableModel);
@@ -65,15 +65,15 @@ public class CustomerOrderDialog extends JDialog {
             for (OrderItemDTO item : order.getOrderItems()) {
                 // 주문 기본 정보와 항목 정보를 결합한 한 행
                 Object[] row = new Object[]{
-                    order.getOrderId(),        
-                    order.getOrderDate(),      
+                    order.getOrderId(),              
                     order.getOrderStatus(),    
                     order.getPaymentStatus(),  
                     order.getShippingAddress(),
                     item.getProductName(),     
                     item.getQuantity(),        
-                    item.getUnitPrice(),       
-                    item.getTotalPrice()       
+                    item.getUnitPrice(),
+                    order.getDiscountAmount(),
+                    order.getTotalAmount()       
                 };
 
                 tableModel.addRow(row);  // 테이블에 한 행 추가

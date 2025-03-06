@@ -27,9 +27,9 @@ public class CustomerDAO {
                 String email = rs.getString("email");
                 String phone = rs.getString("phone");
                 String address = rs.getString("address");
-                String createdAt = rs.getString("created_at");
+     
 
-                customerList.add(new CustomerDTO(customerId, name, email, phone, address, createdAt));
+                customerList.add(new CustomerDTO(customerId, name, email, phone, address));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -124,8 +124,8 @@ public class CustomerDAO {
                     rs.getString("name"),
                     rs.getString("phone"),
                     rs.getString("email"),
-                    rs.getString("address"),
-                    rs.getString("created_at")
+                    rs.getString("address")
+                   
                 );
             }
         } catch (SQLException e) {
@@ -152,8 +152,8 @@ public class CustomerDAO {
                     rs.getString("name"),
                     rs.getString("email"),
                     rs.getString("phone"),
-                    rs.getString("address"),
-                    rs.getString("created_at") 
+                    rs.getString("address")
+                    
                 );
             } else {
                 // 새로운 고객 추가
@@ -170,7 +170,7 @@ public class CustomerDAO {
                     if (generatedKeys.next()) {
                         int customerId = generatedKeys.getInt(1);
                         // 생성된 고객 정보를 CustomerDTO 객체로 반환
-                        customer = new CustomerDTO(customerId, name, email, phone, address, "현재 시간"); // created_at은 현재 시간
+                        customer = new CustomerDTO(customerId, name, email, phone, address);
                     }
                 }
             }

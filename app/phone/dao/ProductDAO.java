@@ -23,10 +23,10 @@ public class ProductDAO {
 				String name = rs.getString("name");
 				double price = rs.getDouble("price");
 				int stockQuantity = rs.getInt("stock_quantity");
-				String createdAt = rs.getString("created_at");
+				
 
 				// ProductDTO 객체 생성 후 리스트에 추가
-				ProductDTO product = new ProductDTO(productId, name, price, stockQuantity, createdAt);
+				ProductDTO product = new ProductDTO(productId, name, price, stockQuantity);
 				productList.add(product);
 			}
 		} catch (SQLException e) {
@@ -50,9 +50,9 @@ public class ProductDAO {
 					String productName = rs.getString("name");
 					double price = rs.getDouble("price");
 					int stockQuantity = rs.getInt("stock_quantity");
-					String createdAt = rs.getString("created_at");
+		
 
-					ProductDTO product = new ProductDTO(productId, productName, price, stockQuantity, createdAt);
+					ProductDTO product = new ProductDTO(productId, productName, price, stockQuantity);
 					productList.add(product);
 				}
 			}
@@ -64,7 +64,7 @@ public class ProductDAO {
 	}
 
 	public void insertProduct(ProductDTO product) {
-		String query = "INSERT INTO Products (name, price, stock_quantity, created_at) VALUES (?, ?, ?,  NOW())";
+		String query = "INSERT INTO Products (name, price, stock_quantity) VALUES (?, ?, ?)";
 
 		try (Connection con = DBManager.getConnection();
 				PreparedStatement pstmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {

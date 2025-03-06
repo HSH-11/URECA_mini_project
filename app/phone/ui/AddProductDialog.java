@@ -56,14 +56,14 @@ public class AddProductDialog extends JDialog {
         int stock = Integer.parseInt(stockField.getText());
         
         // ProductDTO 객체 생성
-        ProductDTO newProduct = new ProductDTO(0, name, price, stock, "현재 시간");
+        ProductDTO newProduct = new ProductDTO(0, name, price, stock);
 
         // ProductDAO 객체 생성 후 insertProduct 메서드 호출
         ProductDAO productDAO = new ProductDAO();
         productDAO.insertProduct(newProduct);  // insertProduct 호출
 
         // 추가된 상품을 테이블에 반영
-        tableModel.addRow(new Object[]{newProduct.getProductId(), newProduct.getName(), newProduct.getPrice(), newProduct.getStockQuantity(), newProduct.getCreatedAt()});
+        tableModel.addRow(new Object[]{newProduct.getProductId(), newProduct.getName(), newProduct.getPrice(), newProduct.getStockQuantity()});
         dispose();
     }
 

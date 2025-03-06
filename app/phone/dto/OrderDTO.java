@@ -1,25 +1,25 @@
 package app.phone.dto;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDTO {
     private int orderId;          
     private int customerId;       
-    private String orderDate;     
     private String orderStatus;   
     private String paymentStatus; 
     private String shippingAddress; 
     private List<OrderItemDTO> orderItems = new ArrayList<>();  // 주문 항목 리스트
-
-   
+    private BigDecimal discountAmount = BigDecimal.ZERO; 
+    private BigDecimal totalAmount = BigDecimal.ZERO;
+    
     public OrderDTO() {}
 
    
-    public OrderDTO(int orderId, int customerId, String orderDate, String orderStatus, String paymentStatus, String shippingAddress) {
+    public OrderDTO(int orderId, int customerId, String orderStatus, String paymentStatus, String shippingAddress) {
         this.orderId = orderId;
         this.customerId = customerId;
-        this.orderDate = orderDate;
         this.orderStatus = orderStatus;
         this.paymentStatus = paymentStatus;
         this.shippingAddress = shippingAddress;
@@ -47,14 +47,7 @@ public class OrderDTO {
         this.customerId = customerId;
     }
 
-    public String getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(String orderDate) {
-        this.orderDate = orderDate;
-    }
-
+   
     public String getOrderStatus() {
         return orderStatus;
     }
@@ -86,10 +79,21 @@ public class OrderDTO {
     public void setOrderItems(List<OrderItemDTO> orderItems) {
         this.orderItems = orderItems;
     }
+    
+    public BigDecimal getDiscountAmount() { return discountAmount; }
+    
+    public void setDiscountAmount(BigDecimal discountAmount) { this.discountAmount = discountAmount; }
+    
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
 
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
     @Override
     public String toString() {
-        return "OrderDTO [orderId=" + orderId + ", customerId=" + customerId + ", orderDate=" + orderDate
+        return "OrderDTO [orderId=" + orderId + ", customerId=" + customerId
                 + ", orderStatus=" + orderStatus + ", paymentStatus=" + paymentStatus + ", shippingAddress="
                 + shippingAddress + ", orderItems=" + orderItems + "]";
     }

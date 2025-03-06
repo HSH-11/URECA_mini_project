@@ -61,7 +61,7 @@ public class EditProductDialog extends JDialog {
 
         // DB에서 상품 수정하는 로직 작성
         ProductDTO updatedProduct = new ProductDTO(
-            (int) tableModel.getValueAt(selectedRow, 0), name, price, stock, "현재 시간");
+            (int) tableModel.getValueAt(selectedRow, 0), name, price, stock);
 
         // ProductDAO의 인스턴스를 생성하여 updateProduct 호출
         ProductDAO productDAO = new ProductDAO();
@@ -71,8 +71,7 @@ public class EditProductDialog extends JDialog {
         tableModel.setValueAt(updatedProduct.getName(), selectedRow, 1);
         tableModel.setValueAt(updatedProduct.getPrice(), selectedRow, 2);
         tableModel.setValueAt(updatedProduct.getStockQuantity(), selectedRow, 3);
-        tableModel.setValueAt(updatedProduct.getCreatedAt(), selectedRow, 4);
-
+       
         dispose();
     }
 

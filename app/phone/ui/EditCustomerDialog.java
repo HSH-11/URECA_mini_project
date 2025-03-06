@@ -59,7 +59,7 @@ public class EditCustomerDialog extends JDialog {
         
         int customerId = (int) tableModel.getValueAt(selectedRow, 0);
         // DB에서 고객 정보를 수정하는 로직 작성
-        CustomerDTO updatedCustomer = new CustomerDTO(customerId, name, email, phone, address,"현재 시간");
+        CustomerDTO updatedCustomer = new CustomerDTO(customerId, name, email, phone, address);
 
         // CustomerDAO의 인스턴스를 생성하여 updateCustomer 호출
         CustomerDAO customerDAO = new CustomerDAO();

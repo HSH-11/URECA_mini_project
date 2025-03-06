@@ -5,14 +5,14 @@ public class ProductDTO {
     private String name;
     private double price;
     private int stockQuantity;
-    private String createdAt;
+   
 
-    public ProductDTO(int productId, String name, double price, int stockQuantity, String createdAt) {
+    public ProductDTO(int productId, String name, double price, int stockQuantity) {
         this.productId = productId;
         this.name = name;
         this.price = price;
         this.stockQuantity = stockQuantity;
-        this.createdAt = createdAt;
+        
     }
 
     // getter & setter
@@ -48,13 +48,7 @@ public class ProductDTO {
         this.stockQuantity = stockQuantity;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
+   
     @Override
     public String toString() {
         return this.name;  

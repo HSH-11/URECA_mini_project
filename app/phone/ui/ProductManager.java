@@ -33,7 +33,7 @@ public class ProductManager extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 
-		tableModel = new DefaultTableModel(new Object[] { "Product ID", "Name", "Price", "Stock", "Created At" }, 0) {
+		tableModel = new DefaultTableModel(new Object[] { "Product ID", "Name", "Price", "Stock"}, 0) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				return false; // 일단 휴대폰 테이블 편집 불가로 해놓기
@@ -110,9 +110,9 @@ public class ProductManager extends JFrame {
 			}
 		});
 		
-		// 제품 목록 갱신 용
+		// 제품 목록 갱신용
 		listButton.addActionListener(e -> listProducts());
-		// 고객 관리 정보 용
+		// 고객 관리 정보용
 		customerButton.addActionListener(e -> openCustomerManager());
 
 		// 선택한 제품 삭제하는 데 이건 외래키 제약 때문에 일단 삭제는 안됨
@@ -151,20 +151,20 @@ public class ProductManager extends JFrame {
 		List<ProductDTO> productList = productDAO.getAllProducts();
 		for (ProductDTO product : productList) {
 			tableModel.addRow(new Object[] { product.getProductId(), product.getName(), product.getPrice(),
-					product.getStockQuantity(), product.getCreatedAt() });
+					product.getStockQuantity()});
 		}
 	}
-	//특정 제품 찾기 용
+	
+	//특정 제품 찾기용
 	private void listProducts(String searchWord) {
 		clearTable();
 		List<ProductDTO> productList = productDAO.getProductsByName(searchWord);
 		for (ProductDTO product : productList) {
 			tableModel.addRow(new Object[] { product.getProductId(), product.getName(), product.getPrice(),
-					product.getStockQuantity(), product.getCreatedAt() });
+					product.getStockQuantity()});
 		}
 	}
 
-	
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> new ProductManager().setVisible(true));
 	}

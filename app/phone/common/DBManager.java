@@ -9,7 +9,7 @@ import java.sql.SQLException;
 public class DBManager {
 	private static String url = "jdbc:mysql://localhost:3306/phonestoredb";
 	private static String user = "root";
-	private static String pwd = "";
+	private static String pwd = "dldydrb15@";
 
 	public static Connection getConnection() {
 		try {

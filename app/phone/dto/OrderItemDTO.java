@@ -3,14 +3,14 @@ package app.phone.dto;
 import java.math.BigDecimal;
 
 public class OrderItemDTO {
-    private int orderItemId;      // 주문 항목 ID
-    private int orderId;          // 주문 ID
-    private int productId;        // 상품 ID
-    private String productName;   // 상품 이름
-    private int quantity;         // 수량
-    private BigDecimal unitPrice; // 단가
-    private BigDecimal discountedPrice; // 할인 가격 (없을 수도 있음)
-    private BigDecimal totalPrice; // 총 가격 (수량 * 적용된 가격)
+    private int orderItemId;      
+    private int orderId;          
+    private int productId;        
+    private String productName;   
+    private int quantity;         
+    private BigDecimal unitPrice; 
+    private BigDecimal discountedPrice; 
+    private BigDecimal totalPrice; 
 
     // 기본 생성자
     public OrderItemDTO() {}

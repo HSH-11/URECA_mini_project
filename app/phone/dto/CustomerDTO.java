@@ -1,21 +1,21 @@
 package app.phone.dto;
 
 public class CustomerDTO {
-    private int customerId;  // 고객 ID
-    private String name;     // 고객 이름
-    private String email;    // 이메일
-    private String phone;    // 전화번호
-    private String address;  // 주소
-    private String createdAt; // 가입 날짜
+    private int customerId;  
+    private String name;     
+    private String email;    
+    private String phone;    
+    private String address;  
+    
 
     // 생성자
-    public CustomerDTO(int customerId, String name, String email, String phone, String address, String createdAt) {
+    public CustomerDTO(int customerId, String name, String email, String phone, String address) {
         this.customerId = customerId;
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.address = address;
-        this.createdAt = createdAt;
+        
     }
 
     // 기본 생성자
@@ -63,13 +63,7 @@ public class CustomerDTO {
         this.address = address;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
+    
 
     // toString() 메서드 (디버깅 및 로그 출력용)
     @Override
@@ -80,7 +74,6 @@ public class CustomerDTO {
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
-                ", createdAt='" + createdAt + '\'' +
                 '}';
     }
 }
