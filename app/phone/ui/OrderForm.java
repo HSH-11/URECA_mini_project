@@ -81,23 +81,22 @@ public class OrderForm extends JFrame {
 		});
 
 		lblTotalPrice = new JLabel("총 금액: 0원");
-		JButton checkCustomerButton = new JButton("고객 정보 확인");
+		JButton checkCustomerButton = new JButton("고객 인증");
 		checkCustomerButton.addActionListener(e -> checkCustomerInfo());
 		add(checkCustomerButton);
 		
-		// 추가: 쿠폰 적용 버튼
 		JButton applyCouponButton = new JButton("쿠폰 적용");
 		applyCouponButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (currentCustomerId <= 0) {
-					JOptionPane.showMessageDialog(OrderForm.this, "먼저 고객 정보를 입력하고 주문을 진행해주세요.");
+					JOptionPane.showMessageDialog(OrderForm.this, "등록되지 않거나 쿠폰이 없습니다.");
 					return;
 				}
 				applyCoupon(currentCustomerId);
 			}
 		});
-		
+
 		// 필드 사이즈 조절
 		productLabel.setPreferredSize(new Dimension(100, 30));
 		productComboBox.setPreferredSize(new Dimension(200, 30));
@@ -107,25 +106,25 @@ public class OrderForm extends JFrame {
 		customerAddressField.setPreferredSize(new Dimension(200, 30));
 		quantityField.setPreferredSize(new Dimension(200, 30));
 
-		// 순서대로 컴포넌트 추가
-	    add(productLabel);
-	    add(productComboBox);
-	    add(nameLabel);
-	    add(customerNameField);
-	    add(emailLabel);
-	    add(customerEmailField);
-	    add(phoneLabel);
-	    add(customerPhoneField);
-	    add(addressLabel);
-	    add(customerAddressField);
-	    add(quantityLabel);
-	    add(quantityField);
-	    add(checkCustomerButton);
-	    add(lblTotalPrice);
-	    add(applyCouponButton);
-	    add(orderButton);
+		add(productLabel);
+		add(productComboBox);
+		add(nameLabel);
+		add(customerNameField);
+		add(emailLabel);
+		add(customerEmailField);
+		add(phoneLabel);
+		add(customerPhoneField);
+		add(addressLabel);
+		add(customerAddressField);
+		add(quantityLabel);
+		add(quantityField);
+		add(checkCustomerButton);
+		add(lblTotalPrice);
+		add(applyCouponButton);
+		add(orderButton);
 	}
 
+	// 주문 정보 입력 받기
 	private void placeOrder() {
 		String customerName = customerNameField.getText();
 		String customerEmail = customerEmailField.getText();
@@ -133,7 +132,8 @@ public class OrderForm extends JFrame {
 		String customerAddress = customerAddressField.getText();
 		int quantity = Integer.parseInt(quantityField.getText());
 		ProductDTO selectedProduct = (ProductDTO) productComboBox.getSelectedItem();
-
+		
+		// 기존 고객 정보 및 신규 고객 생성 후 반환
 		CustomerDTO customer = customerDAO.findOrCreateCustomer(customerName, customerEmail, customerPhone,
 				customerAddress);
 		currentCustomerId = customer.getCustomerId();
@@ -143,25 +143,27 @@ public class OrderForm extends JFrame {
 		newOrder.setShippingAddress(customerAddress);
 
 		BigDecimal unitPrice = BigDecimal.valueOf(selectedProduct.getPrice());
-		totalAmount = unitPrice.multiply(BigDecimal.valueOf(quantity)); // 총액 계산
+		totalAmount = unitPrice.multiply(BigDecimal.valueOf(quantity));
 
+		// 주문 항목 생성
 		OrderItemDTO orderItem = new OrderItemDTO(0, 0, selectedProduct.getProductId(), selectedProduct.getName(),
 				quantity, unitPrice);
 		newOrder.addOrderItem(orderItem);
-		
-		newOrder.setDiscountAmount(discountAmount);  // 적용된 할인 금액 저장
-	    BigDecimal finalAmount = totalAmount.subtract(discountAmount);
-	    newOrder.setTotalAmount(finalAmount);  // 할인 적용된 최종 금액 저장
+
+		newOrder.setDiscountAmount(discountAmount); // 적용된 할인 금액 저장
+		BigDecimal finalAmount = totalAmount.subtract(discountAmount);
+		newOrder.setTotalAmount(finalAmount); // 할인 적용된 최종 금액 저장
 
 		// 주문 저장 (쿠폰 적용 금액 포함)
 		int orderId = orderDAO.createOrder(newOrder, appliedCouponId);
 		orderItem.setOrderId(orderId);
-		
+
 		productDAO.updateStock(selectedProduct.getProductId(), selectedProduct.getStockQuantity() - quantity);
 
 		JOptionPane.showMessageDialog(this, "주문이 완료되었습니다!");
 	}
 
+	// 고객이 보유한 쿠폰을 적용하여 할인이 적용된 금액 표시
 	private void applyCoupon(int customerId) {
 		CustomerCouponDAO customerCouponDAO = new CustomerCouponDAO();
 		List<CouponDTO> coupons = customerCouponDAO.getCustomerCoupons(customerId);
@@ -184,36 +186,42 @@ public class OrderForm extends JFrame {
 			appliedCouponId = selectedCoupon.getCouponId();
 		}
 	}
-	private void checkCustomerInfo() {
-	    String customerName = customerNameField.getText();
-	    String customerEmail = customerEmailField.getText();
-	    String customerPhone = customerPhoneField.getText();
-	    String customerAddress = customerAddressField.getText();
 
-	    if (customerName.isEmpty() || customerEmail.isEmpty()) {
-	        JOptionPane.showMessageDialog(this, "고객 이름과 이메일은 필수 입력입니다.");
-	        return;
+	// 고객 정보 구분은 이름과 전화번호로 제한하였음
+	private void checkCustomerInfo() {
+		String customerName = customerNameField.getText();
+		String customerPhone = customerPhoneField.getText();
+		
+		if (customerName.isEmpty() || customerPhone.isEmpty()) {
+			JOptionPane.showMessageDialog(this, "고객 이름과 전화번호는 필수 입력입니다.");
+			return;
+		}
+		
+		CustomerDTO customer = customerDAO.findCustomerByNameAndPhone(customerName, customerPhone);
+
+	    if (customer != null) {
+	        currentCustomerId = customer.getCustomerId();
+	        JOptionPane.showMessageDialog(this, "기존 고객 정보 확인 완료 (ID: " + currentCustomerId + ")");
+	    } else {
+	        JOptionPane.showMessageDialog(this, "등록되지 않은 고객입니다. 주문 시 자동 등록됩니다.");
+	        currentCustomerId = -1;  // 등록되지 않은 상태 표시
 	    }
 
-	    CustomerDTO customer = customerDAO.findOrCreateCustomer(customerName, customerEmail, customerPhone, customerAddress);
-	    currentCustomerId = customer.getCustomerId();
-
-	    JOptionPane.showMessageDialog(this, "고객 정보 확인 완료 (ID: " + currentCustomerId + ")");
 	    calculateTotalAmount();
 	}
-	private void calculateTotalAmount() {
-	    try {
-	        ProductDTO selectedProduct = (ProductDTO) productComboBox.getSelectedItem();
-	        int quantity = Integer.parseInt(quantityField.getText());
-	        BigDecimal unitPrice = BigDecimal.valueOf(selectedProduct.getPrice());
-	        totalAmount = unitPrice.multiply(BigDecimal.valueOf(quantity));
-	        lblTotalPrice.setText(String.format("총 금액: %,d원", totalAmount.longValue()));
-	    } catch (Exception e) {
-	        totalAmount = BigDecimal.ZERO;
-	        lblTotalPrice.setText("총 금액: 0원");
-	    }
-	}
 
+	private void calculateTotalAmount() {
+		try {
+			ProductDTO selectedProduct = (ProductDTO) productComboBox.getSelectedItem();
+			int quantity = Integer.parseInt(quantityField.getText());
+			BigDecimal unitPrice = BigDecimal.valueOf(selectedProduct.getPrice());
+			totalAmount = unitPrice.multiply(BigDecimal.valueOf(quantity));
+			lblTotalPrice.setText(String.format("총 금액: %,d원", totalAmount.longValue()));
+		} catch (Exception e) {
+			totalAmount = BigDecimal.ZERO;
+			lblTotalPrice.setText("총 금액: 0원");
+		}
+	}
 
 	public static void main(String[] args) {
 		OrderForm orderForm = new OrderForm();

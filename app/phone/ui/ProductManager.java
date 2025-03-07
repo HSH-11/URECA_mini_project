@@ -36,7 +36,7 @@ public class ProductManager extends JFrame {
 		tableModel = new DefaultTableModel(new Object[] { "Product ID", "Name", "Price", "Stock"}, 0) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
-				return false; // 일단 휴대폰 테이블 편집 불가로 해놓기
+				return false; // 일단 상품 테이블 편집 불가로 해놓기
 			}
 		};
 		
@@ -80,8 +80,7 @@ public class ProductManager extends JFrame {
 		add(new JScrollPane(table), BorderLayout.CENTER);
 		add(buttonPanel, BorderLayout.SOUTH);
 
-		// 지금부터 버튼 액션 이벤트 처리!
-
+		// 지금부터 버튼 액션 이벤트 처리
 		searchButton.addActionListener(e -> {
 			String searchWord = searchWordField.getText();
 			if (!searchWord.isBlank()) {
@@ -145,7 +144,7 @@ public class ProductManager extends JFrame {
 		tableModel.setRowCount(0);
 	}
 	
-	//productDAO.getAllProducts()로 제품 긁어와서 뿌려버림~~
+	//productDAO.getAllProducts()로 제품 긁어오기
 	private void listProducts() {
 		clearTable();
 		List<ProductDTO> productList = productDAO.getAllProducts();

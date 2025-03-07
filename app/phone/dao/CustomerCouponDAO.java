@@ -50,16 +50,5 @@ public class CustomerCouponDAO {
         }
     }
 
-    // 고객이 사용한 쿠폰 삭제 (1회성 쿠폰인 경우)
-    public void deleteUsedCoupon(int customerId, int couponId) {
-        String sql = "DELETE FROM CustomerCoupons WHERE customer_id = ? AND coupon_id = ? LIMIT 1";
-        try (Connection conn = DBManager.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, customerId);
-            pstmt.setInt(2, couponId);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+
 }

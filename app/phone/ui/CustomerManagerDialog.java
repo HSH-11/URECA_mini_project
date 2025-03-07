@@ -12,6 +12,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import app.phone.dao.CouponDAO;
 import app.phone.dao.CustomerCouponDAO;
 import app.phone.dao.CustomerDAO;
 import app.phone.dto.CouponDTO;
@@ -35,20 +36,20 @@ public class CustomerManagerDialog extends JDialog {
 
         
         listCustomers();
-
-        
+ 
         JScrollPane scrollPane = new JScrollPane(customerTable);
 
-        // 버튼 설정
         JButton editButton = new JButton("수정");
         JButton deleteButton = new JButton("삭제");
         JButton viewOrderButton = new JButton("주문 정보 보기");
+        JButton issueCouponButton = new JButton("쿠폰 발급");
         JButton showCouponsButton = new JButton("보유 쿠폰 보기");
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(editButton);
         buttonPanel.add(deleteButton);
         buttonPanel.add(viewOrderButton);
+        buttonPanel.add(issueCouponButton);
         buttonPanel.add(showCouponsButton);
 
         
@@ -60,6 +61,7 @@ public class CustomerManagerDialog extends JDialog {
         editButton.addActionListener(e -> openEditCustomerDialog());
         deleteButton.addActionListener(e -> deleteCustomer());
         viewOrderButton.addActionListener(e -> viewCustomerOrders());
+        issueCouponButton.addActionListener(e -> issueCouponToCustomer());
         showCouponsButton.addActionListener(e -> {
             int selectedRow = customerTable.getSelectedRow();
             if (selectedRow == -1) {
@@ -82,7 +84,6 @@ public class CustomerManagerDialog extends JDialog {
     private void openEditCustomerDialog() {
         int selectedRow = customerTable.getSelectedRow();
         if (selectedRow >= 0) {
-//            int customerId = (int) customerTable.getValueAt(selectedRow, 0);
             EditCustomerDialog editDialog = new EditCustomerDialog(this, this.tableModel, selectedRow);
             editDialog.setVisible(true);
         } else {
@@ -131,5 +132,41 @@ public class CustomerManagerDialog extends JDialog {
         }
         JOptionPane.showMessageDialog(this, sb.toString());
     }
+    
+    private void issueCouponToCustomer() {
+        int selectedRow = customerTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "먼저 쿠폰을 발급할 고객을 선택하세요.");
+            return;
+        }
+
+        int customerId = (int) customerTable.getValueAt(selectedRow, 0);
+
+        // 쿠폰 선택을 위한 다이얼로그 표시
+        CouponDAO couponDAO = new CouponDAO();
+        List<CouponDTO> allCoupons = couponDAO.getAllCoupons();
+
+        if (allCoupons.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "발급할 쿠폰이 없습니다. 먼저 쿠폰을 등록하세요.");
+            return;
+        }
+
+        CouponDTO selectedCoupon = (CouponDTO) JOptionPane.showInputDialog(
+            this,
+            "발급할 쿠폰을 선택하세요.",
+            "쿠폰 선택",
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            allCoupons.toArray(),
+            null
+        );
+
+        if (selectedCoupon != null) {
+            CustomerCouponDAO customerCouponDAO = new CustomerCouponDAO();
+            customerCouponDAO.issueCouponToCustomer(customerId, selectedCoupon.getCouponId());
+            JOptionPane.showMessageDialog(this, "쿠폰이 발급되었습니다: " + selectedCoupon.getCouponName());
+        }
+    }
+
 }
 

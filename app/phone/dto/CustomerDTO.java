@@ -63,17 +63,9 @@ public class CustomerDTO {
         this.address = address;
     }
 
-    
-
-    // toString() 메서드 (디버깅 및 로그 출력용)
     @Override
     public String toString() {
-        return "CustomerDTO{" +
-                "customerId=" + customerId +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", address='" + address + '\'' +
-                '}';
+        return name + " (" + phone + ")";
     }
+
 }

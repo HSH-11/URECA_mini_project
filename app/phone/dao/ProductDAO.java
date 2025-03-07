@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDAO {
-	
+
 	// 모든 상품 목록 조회
 	public List<ProductDTO> getAllProducts() {
 		List<ProductDTO> productList = new ArrayList<>();
@@ -23,7 +23,6 @@ public class ProductDAO {
 				String name = rs.getString("name");
 				double price = rs.getDouble("price");
 				int stockQuantity = rs.getInt("stock_quantity");
-				
 
 				// ProductDTO 객체 생성 후 리스트에 추가
 				ProductDTO product = new ProductDTO(productId, name, price, stockQuantity);
@@ -50,7 +49,6 @@ public class ProductDAO {
 					String productName = rs.getString("name");
 					double price = rs.getDouble("price");
 					int stockQuantity = rs.getInt("stock_quantity");
-		
 
 					ProductDTO product = new ProductDTO(productId, productName, price, stockQuantity);
 					productList.add(product);
@@ -94,12 +92,10 @@ public class ProductDAO {
 		String query = "UPDATE Products SET name = ?, price = ?, stock_quantity = ? WHERE product_id = ?";
 
 		try (Connection con = DBManager.getConnection(); PreparedStatement pstmt = con.prepareStatement(query)) {
-
 			pstmt.setString(1, product.getName());
 			pstmt.setDouble(2, product.getPrice());
 			pstmt.setInt(3, product.getStockQuantity());
 			pstmt.setInt(4, product.getProductId());
-
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -117,29 +113,29 @@ public class ProductDAO {
 
 			if (affectedRows > 0) {
 				System.out.println("상품 삭제 성공");
-				return true; 
+				return true;
 			} else {
 				System.out.println("삭제할 상품이 존재하지 않거나 실패");
-				return false; 
+				return false;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false; 
+			return false;
 		}
 	}
-	
-	// 재고 업데이트
-    public void updateStock(int productId, int newStock) {
-        String query = "UPDATE Products SET stock_quantity = ? WHERE product_id = ?";
 
-        try (Connection connection = DBManager.getConnection();
-             PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setInt(1, newStock);
-            ps.setInt(2, productId);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+	// 재고 업데이트
+	public void updateStock(int productId, int newStock) {
+		String query = "UPDATE Products SET stock_quantity = ? WHERE product_id = ?";
+
+		try (Connection connection = DBManager.getConnection();
+				PreparedStatement ps = connection.prepareStatement(query)) {
+			ps.setInt(1, newStock);
+			ps.setInt(2, productId);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 }
